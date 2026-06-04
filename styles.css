@@ -384,6 +384,5 @@ hr {
         height: auto;
         padding: 0;
         margin: 0;
-        filter: none; /* Mejor quitar el blur al imprimir para que la impresora real haga lo suyo */
     }
 }
