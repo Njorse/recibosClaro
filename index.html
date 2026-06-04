@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generador Boleta Claro</title>
+    <link href="https://fonts.googleapis.com/css2?family=Arial:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Panel de Control (Formulario) -->
+        <aside class="controls no-print">
+            <h2>Datos del Recibo</h2>
+            
+            <div class="form-group">
+                <label>Serie y Número</label>
+                <input type="text" id="serie-numero" value="B095 - 00169669">
+            </div>
+            
+            <div class="form-group">
+                <label>Fecha Emisión</label>
+                <input type="text" id="fecha-emision" value="">
+            </div>
+
+            <div class="form-group">
+                <label>Razón Social / Nombre</label>
+                <input type="text" id="razon-social" value="JORGE MOISES MURRIETA TANANTA">
+            </div>
+
+            <div class="form-group">
+                <label>DNI / CE</label>
+                <input type="text" id="dni" value="DNI 72903565">
+            </div>
+            
+            <div class="form-group">
+                <label>Dirección</label>
+                <input type="text" id="direccion" value="SIN INFORMACION - LIMA -">
+            </div>
+
+            <div class="form-group">
+                <label>% IGV</label>
+                <input type="number" id="igv-percent" value="18" step="1">
+            </div>
+
+            <h3>Productos / Cargos</h3>
+            <div id="items-container">
+                <!-- Se llenará dinámicamente -->
+            </div>
+            <button id="add-item-btn" class="btn-secondary">+ Agregar Concepto</button>
+
+            <hr>
+            
+            <div class="actions">
+                <button id="print-btn" class="btn-primary">Imprimir</button>
+                <button id="export-img-btn" class="btn-primary">Guardar como Imagen</button>
+                <button id="export-csv-btn" class="btn-secondary">Exportar a Excel (CSV)</button>
+            </div>
+        </aside>
+
+        <!-- Vista Previa (El recibo real) -->
+        <main class="preview">
+            <div class="receipt" id="receipt">
+                <!-- Header -->
+                <header class="receipt-header">
+                    <div class="logo-company">
+                        <!-- Círculo rojo simulando el logo de Claro -->
+                        <div class="logo">
+                            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="50" cy="50" r="45" fill="#DA291C" />
+                                <text x="50" y="55" font-family="Arial, sans-serif" font-weight="bold" font-size="28" fill="white" text-anchor="middle">Claro-</text>
+                            </svg>
+                        </div>
+                        <div class="company-info">
+                            <h3>América Móvil Perú S.A.C.</h3>
+                            <p>Av. Nicolás Arriola 480 Urb. Santa Catalina - Lima 12</p>
+                            <p>La Victoria - Lima - Lima</p>
+                            <p>Teléfono: +51 1 613 - 10000</p>
+                            <p>Fax: +51 1 613 - 1072</p>
+                            <p>www.claro.com.pe</p>
+                        </div>
+                    </div>
+                    <div class="ruc-box">
+                        <p class="ruc">R.U.C. 20467534026</p>
+                        <p class="boleta-title">BOLETA DE VENTA<br>ELECTRONICA</p>
+                        <p class="boleta-number"><span id="out-serie">B095</span> Nº <span id="out-numero">00169669</span></p>
+                    </div>
+                </header>
+
+                <!-- Customer Info -->
+                <div class="customer-info">
+                    <div class="col-left">
+                        <div class="info-row"><span class="label">RAZÓN SOCIAL</span><span class="colon">:</span><span class="val" id="out-razon"></span></div>
+                        <div class="info-row"><span class="label">DIRECCIÓN</span><span class="colon">:</span><span class="val" id="out-direccion"></span></div>
+                        <div class="info-row"><span class="label">DNI/CE/OTROS</span><span class="colon">:</span><span class="val" id="out-dni"></span></div>
+                        <div class="info-row"><span class="label">GUIA DE REMISIÓN</span><span class="colon">:</span><span class="val"></span></div>
+                    </div>
+                    <div class="col-right">
+                        <div class="info-row"><span class="label">FECHA DE EMISIÓN</span><span class="colon">:</span><span class="val" id="out-fecha"></span></div>
+                        <div class="info-row"><span class="label">FECHA DE VENCIMIENTO</span><span class="colon">:</span><span class="val"></span></div>
+                        <div class="info-row"><span class="label">ORDEN DE COMPRA</span><span class="colon">:</span><span class="val"></span></div>
+                        <div class="info-row"><span class="label">TIPO DE MONEDA</span><span class="colon">:</span><span class="val">SOL</span></div>
+                    </div>
+                </div>
+
+                <!-- Items Table -->
+                <table class="items-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 15%">CÓDIGO</th>
+                            <th style="width: 45%; text-align: left;">DESCRIPCIÓN</th>
+                            <th style="width: 5%">UM</th>
+                            <th style="width: 5%">CANTIDAD</th>
+                            <th style="width: 10%">PRECIO UNITARIO</th>
+                            <th style="width: 10%">VALOR UNITARIO</th>
+                            <th style="width: 10%">TOTAL</th>
+                        </tr>
+                    </thead>
+                    <tbody id="out-items">
+                        <!-- Llenado dinámico -->
+                    </tbody>
+                </table>
+
+                <!-- Totals Section -->
+                <div class="totals-section">
+                    <div class="totals-left">
+                        <p class="son-letras">SON: <span id="out-letras"></span></p>
+                    </div>
+                    <div class="totals-right">
+                        <table class="totals-table">
+                            <tr><td>OP. GRAVADAS</td><td>S/</td><td class="amount" id="out-op-gravadas">0.00</td></tr>
+                            <tr><td>OP. INAFECTAS</td><td>S/</td><td class="amount">0.00</td></tr>
+                            <tr><td>OP. EXONERADAS</td><td>S/</td><td class="amount">0.00</td></tr>
+                            <tr><td>OP. EXPORTACIÓN</td><td>S/</td><td class="amount">0.00</td></tr>
+                            <tr><td>OP. GRATUITAS</td><td>S/</td><td class="amount" id="out-op-gratuitas">0.00</td></tr>
+                            <tr><td>DESCUENTOS GLOBALES</td><td>S/</td><td class="amount">0.00</td></tr>
+                            <tr><td>I.G.V. (<span id="out-igv-percent">18</span>%)</td><td>S/</td><td class="amount" id="out-igv">0.00</td></tr>
+                            <tr><td>OTROS TRIBUTOS</td><td>S/</td><td class="amount">0.00</td></tr>
+                            <tr><td>OTROS CARGOS</td><td>S/</td><td class="amount">0.00</td></tr>
+                            <tr><td>REDONDEO</td><td>S/</td><td class="amount">0.00</td></tr>
+                            <tr class="total-row"><td>TOTAL</td><td>S/</td><td class="amount" id="out-total">0.00</td></tr>
+                        </table>
+                    </div>
+                </div>
+                
+                <div class="footer-note">
+                    Representación impresa de la Boleta electrónica. Consúltela en www.claro.com.pe<br>
+                    Autorizado mediante resolución N° 0 /SUNAT
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- html2canvas para exportar a imagen -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <!-- Script conversor números a letras (para el SON:) -->
+    <script src="script.js"></script>
+</body>
+</html>
