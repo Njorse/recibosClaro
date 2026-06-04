@@ -178,8 +178,8 @@ async function printReceipt() {
     const originalFilter = receiptEl.style.filter;
     const originalTextShadow = receiptEl.style.textShadow;
     receiptEl.style.boxShadow = 'none';
-    receiptEl.style.filter = 'blur(0.5px)';
-    receiptEl.style.textShadow = '0 0 0.3px rgba(0, 0, 0, 0.4)';
+    receiptEl.style.filter = 'blur(0.8px)';
+    receiptEl.style.textShadow = '0 0 0.4px rgba(0, 0, 0, 0.4)';
 
     try {
         const canvas = await html2canvas(receiptEl, { scale: 2 });
@@ -221,8 +221,8 @@ function exportToImage() {
     const originalShadow = receiptEl.style.boxShadow;
     const originalFilter = receiptEl.style.filter;
     receiptEl.style.boxShadow = 'none';
-    receiptEl.style.filter = 'blur(0.5px)';
-    receiptEl.style.textShadow = '0 0 0.3px rgba(0, 0, 0, 0.4)';
+    receiptEl.style.filter = 'blur(0.8px)';
+    receiptEl.style.textShadow = '0 0 0.4px rgba(0, 0, 0, 0.4)';
     
     html2canvas(receiptEl, { scale: 2 }).then(canvas => {
         const link = document.createElement('a');
@@ -242,8 +242,8 @@ async function exportToPDF() {
     const originalShadow = receiptEl.style.boxShadow;
     const originalFilter = receiptEl.style.filter;
     receiptEl.style.boxShadow = 'none';
-    receiptEl.style.filter = 'blur(0.5px)';
-    receiptEl.style.textShadow = '0 0 0.3px rgba(0, 0, 0, 0.4)';
+    receiptEl.style.filter = 'blur(0.8px)';
+    receiptEl.style.textShadow = '0 0 0.4px rgba(0, 0, 0, 0.4)';
     
     try {
         const canvas = await html2canvas(receiptEl, { scale: 2 });
