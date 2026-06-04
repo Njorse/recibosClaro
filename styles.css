@@ -386,5 +386,6 @@ hr {
         height: auto;
         padding: 0;
         margin: 0;
+        filter: blur(0.15px);
     }
 }
