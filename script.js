@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.getElementById('add-item-btn').addEventListener('click', addNewItem);
     
-    document.getElementById('print-btn').addEventListener('click', () => window.print());
+    document.getElementById('print-btn').addEventListener('click', printReceipt);
     document.getElementById('export-img-btn').addEventListener('click', exportToImage);
     document.getElementById('export-pdf-btn').addEventListener('click', exportToPDF);
     document.getElementById('export-csv-btn').addEventListener('click', exportToCSV);
@@ -172,6 +172,48 @@ function updateTotals() {
 // ========================
 // EXPORTS
 // ========================
+async function printReceipt() {
+    const receiptEl = document.getElementById('receipt');
+    const originalShadow = receiptEl.style.boxShadow;
+    const originalFilter = receiptEl.style.filter;
+    const originalTextShadow = receiptEl.style.textShadow;
+    receiptEl.style.boxShadow = 'none';
+    receiptEl.style.filter = 'blur(0.5px)';
+    receiptEl.style.textShadow = '0 0 0.3px rgba(0, 0, 0, 0.4)';
+
+    try {
+        const canvas = await html2canvas(receiptEl, { scale: 2 });
+        const imgData = canvas.toDataURL('image/png');
+
+        const printWindow = window.open('', '_blank');
+        if (!printWindow) {
+            alert('Permite ventanas emergentes para imprimir.');
+            return;
+        }
+        printWindow.document.write(`
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <title>Imprimir Boleta</title>
+                <style>
+                    @page { size: A5 portrait; margin: 5mm; }
+                    body { margin: 0; padding: 0; }
+                    img { width: 100%; height: auto; display: block; }
+                </style>
+            </head>
+            <body>
+                <img src="${imgData}" onload="setTimeout(() => { window.print(); window.close(); }, 250);">
+            </body>
+            </html>
+        `);
+        printWindow.document.close();
+    } finally {
+        receiptEl.style.boxShadow = originalShadow;
+        receiptEl.style.filter = originalFilter;
+        receiptEl.style.textShadow = originalTextShadow;
+    }
+}
+
 function exportToImage() {
     const receiptEl = document.getElementById('receipt');
     
