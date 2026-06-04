@@ -179,7 +179,8 @@ function exportToImage() {
     const originalShadow = receiptEl.style.boxShadow;
     const originalFilter = receiptEl.style.filter;
     receiptEl.style.boxShadow = 'none';
-    receiptEl.style.filter = 'blur(0.3px)';
+    receiptEl.style.filter = 'blur(0.5px)';
+    receiptEl.style.textShadow = '0 0 0.3px rgba(0, 0, 0, 0.4)';
     
     html2canvas(receiptEl, { scale: 2 }).then(canvas => {
         const link = document.createElement('a');
@@ -190,6 +191,7 @@ function exportToImage() {
         // Restaurar estilos
         receiptEl.style.boxShadow = originalShadow;
         receiptEl.style.filter = originalFilter;
+        receiptEl.style.textShadow = '';
     });
 }
 
@@ -198,7 +200,8 @@ async function exportToPDF() {
     const originalShadow = receiptEl.style.boxShadow;
     const originalFilter = receiptEl.style.filter;
     receiptEl.style.boxShadow = 'none';
-    receiptEl.style.filter = 'blur(0.3px)';
+    receiptEl.style.filter = 'blur(0.5px)';
+    receiptEl.style.textShadow = '0 0 0.3px rgba(0, 0, 0, 0.4)';
     
     try {
         const canvas = await html2canvas(receiptEl, { scale: 2 });
@@ -214,6 +217,7 @@ async function exportToPDF() {
     } finally {
         receiptEl.style.boxShadow = originalShadow;
         receiptEl.style.filter = originalFilter;
+        receiptEl.style.textShadow = '';
     }
 }
 
