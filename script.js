@@ -44,6 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     document.getElementById('print-btn').addEventListener('click', () => window.print());
     document.getElementById('export-img-btn').addEventListener('click', exportToImage);
+    document.getElementById('export-pdf-btn').addEventListener('click', exportToPDF);
     document.getElementById('export-csv-btn').addEventListener('click', exportToCSV);
 
     updateHeader();
@@ -187,6 +188,27 @@ function exportToImage() {
         // Restaurar estilos
         receiptEl.style.boxShadow = originalShadow;
     });
+}
+
+async function exportToPDF() {
+    const receiptEl = document.getElementById('receipt');
+    const originalShadow = receiptEl.style.boxShadow;
+    receiptEl.style.boxShadow = 'none';
+    
+    try {
+        const canvas = await html2canvas(receiptEl, { scale: 2 });
+        const imgData = canvas.toDataURL('image/png');
+        
+        const { jsPDF } = window.jspdf;
+        const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a5' });
+        const pdfWidth = pdf.internal.pageSize.getWidth();
+        const imgHeight = (canvas.height * pdfWidth) / canvas.width;
+        
+        pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, imgHeight);
+        pdf.save(`Boleta_Claro_${outSerie.textContent}-${outNumero.textContent}.pdf`);
+    } finally {
+        receiptEl.style.boxShadow = originalShadow;
+    }
 }
 
 function exportToCSV() {
