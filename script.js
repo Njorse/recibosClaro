@@ -177,7 +177,9 @@ function exportToImage() {
     
     // Guardar estilos actuales para restaurar
     const originalShadow = receiptEl.style.boxShadow;
-    receiptEl.style.boxShadow = 'none'; // Quitar sombra para la imagen
+    const originalFilter = receiptEl.style.filter;
+    receiptEl.style.boxShadow = 'none';
+    receiptEl.style.filter = 'blur(0.3px)';
     
     html2canvas(receiptEl, { scale: 2 }).then(canvas => {
         const link = document.createElement('a');
@@ -187,13 +189,16 @@ function exportToImage() {
         
         // Restaurar estilos
         receiptEl.style.boxShadow = originalShadow;
+        receiptEl.style.filter = originalFilter;
     });
 }
 
 async function exportToPDF() {
     const receiptEl = document.getElementById('receipt');
     const originalShadow = receiptEl.style.boxShadow;
+    const originalFilter = receiptEl.style.filter;
     receiptEl.style.boxShadow = 'none';
+    receiptEl.style.filter = 'blur(0.3px)';
     
     try {
         const canvas = await html2canvas(receiptEl, { scale: 2 });
@@ -208,6 +213,7 @@ async function exportToPDF() {
         pdf.save(`Boleta_Claro_${outSerie.textContent}-${outNumero.textContent}.pdf`);
     } finally {
         receiptEl.style.boxShadow = originalShadow;
+        receiptEl.style.filter = originalFilter;
     }
 }
 
