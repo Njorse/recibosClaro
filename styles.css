@@ -169,7 +169,6 @@ hr {
     font-size: 9px;
     color: #333; /* Un negro más suave para simular tinta gastada */
     font-weight: 300; /* Letra más delgada */
-    filter: blur(0.7px); /* Efecto de tinta borrosa/corrida aumentado */
     opacity: 0.95;
     margin-bottom: 20px;
 }
