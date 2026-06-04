@@ -188,8 +188,9 @@ hr {
 }
 
 .logo {
-    width: 60px;
-    height: 60px;
+    width: 110px;
+    height: 110px;
+    flex-shrink: 0;
 }
 
 .company-info h3 {
